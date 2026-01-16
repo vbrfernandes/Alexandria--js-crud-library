@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style_alexandria.css" />
+    <script defer src="js/alexandria.js"></script>
+    <title>Alexandria</title>
+  </head>
+  <body>
+   <header>
+      <div class="logo">
+        <img src="img/Logo.png" alt="Alexandria Logo" id="logoimg" />
+      </div>
+      <div class="menu">
+        <nav class="navBar">
+          <a href="#" class="itenMenu" id="btnExportar">Salvar .JSON</a>
+          <a href="#" class="itenMenu" id="btnImportar">Carregar .JSON</a>
+          <a href="#" class="itenMenu" id="btnExcel">Salvar Excel</a>
+          <a href="#" class="itenMenu" id="btnResetar">Resetar</a>
+          
+          <input type="file" id="inputArquivoJson" accept=".json" style="display: none;" />
+
+          <a href="#" class="itenMenu" id="btnTema">🌙 Tema</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="conteudoPrincipal">
+        
+        <section>
+          <h3 class="tituloCadastroDeLivros">CADASTRO DE LIVROS</h3>
+          <form class="cadastroLivros">
+            <input type="text" id="titulo" placeholder="TÍTULO DO LIVRO" />
+            <input type="text" id="editora" placeholder="EDITORA" />
+            <input type="text" id="autor" placeholder="AUTOR" />
+            <input type="text" id="edicao" placeholder="EDIÇÃO" />
+
+            <div class="codigo">
+              <input type="number" id="volume" placeholder="VOLUME" />
+              
+              <select id="grupo">
+                <option value="" disabled selected>Grupo</option>
+              </select>
+              
+              <select id="subGrupo">
+                <option value="" disabled selected>SUBGRUPO</option>
+              </select>
+              
+              <p>Selecione Grupo e Subgrupo, depois clique para gerar o número:</p>
+              <button type="button" id="gerarCodigo">GERAR CÓDIGO (SEQUENCIAL)</button>
+            </div>
+
+            <button type="submit" id="cadastrarLivro">CADASTRAR LIVRO</button>
+          </form>
+        </section>
+
+        <div class="boxTabela">
+          <div class="barraPesquisar">
+            <input type="search" id="pesquisar" placeholder="Pesquisar por título, autor ou código..." onkeyup="filtrarLivros()" />
+          </div>
+          <div>
+            <table id="tabelaLivros">
+              <thead id="cabecaTablea">
+                <tr>
+                  <th onclick="ordenarPor('titulo')" class="sortable">Título ↕</th>
+                  <th onclick="ordenarPor('autor')" class="sortable">Autor ↕</th>
+                  <th onclick="ordenarPor('codigo')" class="sortable">Código ↕</th>
+                  <th onclick="ordenarPor('lido')" class="sortable">Lido ↕</th>
+                </tr>
+              </thead>
+              <tbody id="corpoTabela">
+              </tbody>
+            </table>
+          </div>
+          <div class="footer-tabela">
+             <button id="btnMostrarTodos" onclick="resetarTabela()">↻ Mostrar Todos / Atualizar Lista</button>
+             <p id="contadorLivros" class="contador-texto"></p>
+          </div>
+        </div>
+
+        <aside class="grupos">
+          <h2>GRUPOS</h2>
+          <button id="btnAbrirModalGrupo">
+             + Cadastrar Grupo
+          </button>
+          <div class="listaGrupos">
+            <ul>
+            </ul>
+          </div>
+
+          <h2>SUBGRUPOS</h2>
+          <button id="btnAbrirModalSub">
+              + Cadastrar Subgrupo
+          </button>
+          
+          <div class="listaSubgrupos">
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <div id="fade" class="hide"></div>
+
+    <div id="modal-grupo" class="modal hide">
+        <div class="modal-header">
+            <h3>Novo Grupo</h3>
+        </div>
+        <div class="modal-body">
+            <label>Nome do Grupo:</label>
+            <input type="text" id="inputNomeNovoGrupo" placeholder="Ex: Direito, Ficção...">
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancelar">Cancelar</button>
+            <button id="btnSalvarGrupo" class="btn-confirmar">Salvar</button>
+        </div>
+    </div>
+
+    <div id="modal-subgrupo" class="modal hide">
+        <div class="modal-header">
+            <h3>Novo Subgrupo</h3>
+        </div>
+        <div class="modal-body">
+            <label>Pertence a qual Grupo?</label>
+            <select id="selectGrupoParaSub">
+            </select>
+            
+            <label>Nome do Subgrupo:</label>
+            <input type="text" id="inputNomeNovoSub" placeholder="Ex: Penal, Terror...">
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancelar">Cancelar</button>
+            <button id="btnSalvarSub" class="btn-confirmar">Salvar</button>
+        </div>
+    </div>
+
+    <div id="modal-editar-livro" class="modal hide">
+        <div class="modal-header">
+            <h3>Editar Livro</h3>
+        </div>
+        <div class="modal-body" id="formEdicaoBody">
+            <label>Título:</label>
+            <input type="text" id="editTitulo">
+            
+            <label>Autor:</label>
+            <input type="text" id="editAutor">
+            
+            <label>Editora:</label>
+            <input type="text" id="editEditora">
+            
+            <label>Edição:</label>
+            <input type="text" id="editEdicao">
+
+            <label>Código (Apenas leitura):</label>
+            <input type="text" id="editCodigo" disabled class="input-readonly">
+
+            <label>Já foi lido?</label>
+            <select id="editLido">
+                <option value="false">Não</option>
+                <option value="true">Sim</option>
+            </select>
+
+            <label class="label-obs">Observações:</label>
+            <textarea id="editObservacao" rows="4" class="textarea-obs" placeholder="Adicione detalhes, motivo do descarte ou anotações..."></textarea>
+        </div>
+        
+        <div class="modal-footer modal-footer-split">
+            <button id="btnDescartarLivro" class="btn-descartar-red">
+                🗑 Descartar
+            </button>
+
+            <div class="grupo-botoes-direita">
+                <button class="btn-cancelar">Cancelar</button>
+                <button id="btnSalvarEdicao" class="btn-confirmar">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

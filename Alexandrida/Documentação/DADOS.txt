@@ -1,0 +1,14 @@
+Essa conversa descreve os requisitos iniciais para um **aplicativo de catalogação de livros** com cerca de **1000 volumes**.
+
+Os principais pontos são:
+
+1.  **Volume:** Aproximadamente **1000 livros**.
+2.  **Grupos Principais:** A coleção é dividida em 4 grandes grupos: **Romance, Neurociência, Teologia e Direito**.
+3.  **Estrutura:** Cada grupo possui **subgrupos**.
+4.  **Sistema de Codificação:** Cada livro receberá um código de identificação que inclui:
+    * **Número/Volume**
+    * **Letra do Grupo**
+    * **Letra do Subgrupo**
+    * **Exemplo:** $\text{33 T. N}$ (livro 33 do grupo **T**eologia, subgrupo **N**ovo testamento).
+5.  **Informação Adicional:** O **nome** de cada livro também deve ser registrado.
+6.  **Flexibilidade:** O sistema (e suas planilhas) deve ser capaz de **acomodar novos livros** dentro dos subgrupos, exigindo a atualização da numeração (acréscimo/revisão) quando isso ocorrer.
